@@ -16,8 +16,8 @@ class ScrollableSVG extends ScrollableElem {
             les étapes de transitions entre les path
             sous la forme :
                 steps=".3 .5"
-            cette list est de longueur len(paths)-2 les étapes 0.0 et 1.0
-            étant implicites
+            cette list est de longueur len(paths)-2
+            les étapes 0.0 et 1.0 étant implicites
         */
     }
 
@@ -30,23 +30,12 @@ class ScrollableSVG extends ScrollableElem {
     // }
 
     attributeChangedCallback(name, oldvalue, newvalue) {
-        // elt.nodeName == "DIV"
         super.attributeChangedCallback(name, oldvalue, newvalue);
 
         switch(name) {
             case 'paths':
-                let lsPathTag = newvalue.split(' ').map(tagID => {
-                    return document.getElementById(tagID);
-                }).filter(tag => (tag != null && tag.nodeName == "M-PATH"));
-                
-                let lsSteps = Object.keys(this.path);
-
-                lsPathTag.slice(0, lsSteps.length);
-                lsSteps.slice
-
-                break;
-
             case 'steps':
+                this.setMorphing();
                 break;
         }
     }
@@ -55,8 +44,34 @@ class ScrollableSVG extends ScrollableElem {
         super.update();
     }
 
-    setMorphing(paths, steps) {
+    setMorphing() {
+        let paths = this.hasAttribute('paths') ? this.getAttribute('paths') : '';
+        let steps = this.hasAttribute('steps') ? this.getAttribute('steps') : '';
+
+        //GET VALID MorphPath TAG BY ID
+        let lsPathTag = paths.split(' ').map(tagID => {
+            return document.getElementById(tagID);
+        }).filter(tag => (tag != null && tag.nodeName == "M-PATH"));
         
+        let test = lsPathTag[0];
+        console.log(test);
+
+        //MAKE VALID STEP ARRAY
+        let lsSteps = steps.split(' ').filter(step => (!isNaN(+step) && 0.<+step && +step<1.));
+        lsSteps = lsSteps.map(step => +step).slice(0, lsPathTag.length-2);
+        lsSteps.splice(0, 0, 0.0);
+        lsSteps.push(1.0);
+
+
+        //ENSURE THAT BOTH ARRAY ARE EQUAL NOW
+        lsPathTag.slice(0, lsSteps.length);
+
+        //ASSOCIATE THEM
+        this.path = {};
+        for(let i=0; i<lsSteps.length; i++) {
+            this.path[lsSteps[i]] = lsPathTag[i];
+        }
+        console.log(this.path);
     }
 
     static get observedAttributes() {return ['start', 'stop', 'horizontal', 'paths', 'steps']}
@@ -65,12 +80,15 @@ class ScrollableSVG extends ScrollableElem {
 class MorphPath extends HTMLElement {
     constructor() {
         super();
-        this.path = '';
-        this.isValid = false;
+        this.pathStr = '';
     }
 
     connectedCallback() {
-        this.path = this.hasAttribute('p') ? this.getAttribute('p') : '';
-        this.isValid = this.hasAttribute('p');
+        this.pathStr = this.hasAttribute('p') ? this.getAttribute('p') : '';
     }
+
+    test() {
+        console.log('YAAA !!!');
+    }
+    // get pathStr() {return this.path;}
 }

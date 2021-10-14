@@ -9,12 +9,12 @@
 </head>
 <body>
     <s-scroll start="500" stop="1000">
-        <m-path id="A"></m-path>
+        <m-path path="test" id="A"></m-path>
     </s-scroll>
     <m-path id="B"></m-path>
     <m-path id="C"></m-path>
 
-    <s-svg paths="A B C D" start="100" stop="200"></s-svg>
+    <s-svg paths="A B C" steps=".8" start="100" stop="200"></s-svg>
 
     <script src="https://unpkg.com/flubber@0.3.0"></script>
     <script type="module" src="/static/js/app.js"></script>
