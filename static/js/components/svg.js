@@ -54,7 +54,7 @@ class ScrollableSVG extends ScrollableElem {
         }).filter(tag => (tag != null && tag.nodeName == "M-PATH"));
         
         let test = lsPathTag[0];
-        console.log(test);
+        setTimeout(()=>{console.log(test.path);}, 100);
 
         //MAKE VALID STEP ARRAY
         let lsSteps = steps.split(' ').filter(step => (!isNaN(+step) && 0.<+step && +step<1.));
@@ -80,15 +80,14 @@ class ScrollableSVG extends ScrollableElem {
 class MorphPath extends HTMLElement {
     constructor() {
         super();
-        this.pathStr = '';
+        this.path = 'kek';
     }
 
     connectedCallback() {
-        this.pathStr = this.hasAttribute('p') ? this.getAttribute('p') : '';
+        this.path = this.hasAttribute('p') ? this.getAttribute('p') : '';
     }
 
     test() {
-        console.log('YAAA !!!');
+        console.log(this.path);
     }
-    // get pathStr() {return this.path;}
 }
